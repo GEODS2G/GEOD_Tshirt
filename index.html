@@ -233,8 +233,8 @@
         .replace(/ /g, '_')
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      const finalKey = `${modeleKey}_${styleKey
-      const finalKey = `${modeleKey}_${styleKey}`;
+      const finalKey = `${
+              const finalKey = `${modeleKey}_${styleKey}`;
       return idMap[finalKey] || null;
     }
 
@@ -253,8 +253,45 @@
 
     document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
     document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
+
+    document.getElementById('commandeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (envoiEnCours) return;
+      envoiEnCours = true;
+
+      const bouton = e.target.querySelector("button");
+      bouton.disabled = true;
+
+      const data = new FormData(e.target);
+      const params = new URLSearchParams(data);
+
+      fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec", {
+      method: "POST",
+      body: params
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert("✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.");
+        document.getElementById("confirmationMessage").textContent =
+          "✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.";
+
+        // Réinitialise uniquement les champs modèle, style, taille et quantité
+        document.querySelector('select[name="modele"]').value = "";
+        document.querySelector('select[name="style"]').value = "";
+        document.querySelector('select[name="taille"]').value = "";
+        document.querySelector('input[name="quantite"]').value = "";
+
+        document.getElementById("previewCombined").innerHTML = "";
+        bouton.disabled = false;
+        envoiEnCours = false;
+      })
+      .catch(err => {
+        alert("❌ Erreur lors de l'envoi de la commande.");
+        console.error("Erreur :", err);
+        bouton.disabled = false;
+        envoiEnCours = false;
+      });
+    });
   </script>
 </body>
 </html>
-
-                                       
