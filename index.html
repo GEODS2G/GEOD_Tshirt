@@ -194,7 +194,7 @@
     <p id="confirmationMessage"></p>
   </div>
 
- <script>
+<script>
   let envoiEnCours = false;
 
   const idMap = {
@@ -261,12 +261,11 @@
     const bouton = e.target.querySelector("button");
     bouton.disabled = true;
 
-    const data = new FormData(e.target);
-    const params = new URLSearchParams(data);
+    const formData = new FormData(e.target);
 
     fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec", {
       method: "POST",
-      body: params
+      body: formData
     })
     .then(res => res.text())
     .then(msg => {
@@ -291,7 +290,7 @@
     });
   });
 </script>
-
 </body>
 </html>
+
 
