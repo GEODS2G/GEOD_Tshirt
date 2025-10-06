@@ -165,7 +165,7 @@
         <option value="Short to ground">Short to ground</option>
         <option value="Blue lady">Blue lady</option>
         <option value="Conspiracy">Conspiracy</option>
-        <option value="Rattlesnake's stone">Rattlesnake's stone</option>
+        <option value="Rattlesnakes stone">Rattlesnakes stone</option>
         <option value="More">More</option>
       </select>
 
@@ -195,77 +195,40 @@
     <p id="confirmationMessage"></p>
   </div>
 
-  <script>
-    const idMap = {
-      "debardeur_blue_lady": "https://i.imgur.com/Hdqhv78.jpg",
-      "debardeur_conspiracy": "https://i.imgur.com/WX8ct1w.jpg",
-      "debardeur_geod_couverture_cd": "https://i.imgur.com/gBWuJXJ.jpg",
-      "debardeur_more": "https://i.imgur.com/OTo04mh.jpg",
-      "debardeur_rattlesnakes_stone": "https://i.imgur.com/ZWhh2c1.jpg",
-      "debardeur_short_to_ground": "https://i.imgur.com/7ZzqV6o.jpg",
-      "femme_blue_lady": "https://i.imgur.com/4cb4Ysa.jpg",
-      "femme_conspiracy": "https://i.imgur.com/bzjcXWW.jpg",
-      "femme_geod_couverture_cd": "https://i.imgur.com/qRsypOr.jpg",
-      "femme_more": "https://i.imgur.com/swfdD2w.jpg",
-      "femme_rattlesnakes_stone": "https://i.imgur.com/9TlVHOO.jpg",
-      "femme_short_to_ground": "https://i.imgur.com/6aij7nd.jpg",
-      "homme_blue_lady": "https://i.imgur.com/eTcuvEQ.jpg",
-      "homme_conspiracy": "https://i.imgur.com/gmlqMG4.jpg",
-      "homme_geod_couverture_cd": "https://i.imgur.com/ElmFdIk.jpg",
-      "homme_more": "https://i.imgur.com/yI4UWr7.jpg",
-      "homme_rattlesnakes_stone": "https://i.imgur.com/TEmZAEt.jpg",
-      "homme_short_to_ground": "https://i.imgur.com/5cDO1p3.jpg"
-    };
+<script>
+document.querySelector('select[name="style"]').addEventListener('change', function () {
+  const style = this.value;
+  const preview = document.getElementById('previewCombined');
 
-    function updatePreview() {
-      const modele = document.querySelector('select[name="modele"]').value;
-      const style = document.querySelector('select[name="style"]').value;
-      const preview = document.getElementById('previewCombined');
+  if (style) {
+    const formatted = style.toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/'/g, '') // retire l'apostrophe pour correspondre au nom de fichier
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // retire les accents
 
-      if (!modele || !style) {
-        preview.innerHTML = '';
-        return;
-      }
+    const imageUrl = `https://geod-images.netlify.app/${formatted}.jpg`;
 
-      let prefix = '';
-      if (modele.includes('homme')) prefix = 'homme';
-      else if (modele.includes('femme')) prefix = 'femme';
-      else if (modele.includes('Débardeur')) prefix = 'debardeur';
+    preview.innerHTML = `<img src="${imageUrl}" alt="${style}" />`;
+  } else {
+    preview.innerHTML = '';
+  }
+});
 
-      const suffix = style.toLowerCase()
-        .replace(/
-              const suffix = style.toLowerCase()
-        .replace(/'/g, '') // retirer l'apostrophe
-        .replace(/ /g, '_')
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // retirer les accents
+document.getElementById('commandeForm').addEventListener('submit', function (e) {
+  e.preventDefault();
 
-      const key = `${prefix}_${suffix}`;
-      const imageUrl = idMap[key];
+  // ici tu peux ajouter ton envoi vers Google Sheets ou autre
 
-      if (imageUrl) {
-        preview.innerHTML = `<img src="${imageUrl}" alt="${style}" />`;
-      } else {
-        preview.innerHTML = `<p style="color:red;">Aucun aperçu disponible pour ce modèle/style.</p>`;
-      }
-    }
+  document.querySelector('select[name="modele"]').value = "";
+  document.querySelector('select[name="style"]').value = "";
+  document.querySelector('select[name="taille"]').value = "";
+  document.querySelector('input[name="quantite"]').value = "";
+  document.getElementById('previewCombined').innerHTML = "";
 
-    document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
-    document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
+  document.getElementById('confirmationMessage').textContent = "Commande envoyée avec succès !";
+});
+</script>
 
-    document.getElementById('commandeForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      // Envoi vers Google Sheets ici…
-
-      // Réinitialisation partielle
-      document.querySelector('select[name="modele"]').value = "";
-      document.querySelector('select[name="style"]').value = "";
-      document.querySelector('select[name="taille"]').value = "";
-      document.querySelector('input[name="quantite"]').value = "";
-      document.getElementById('previewCombined').innerHTML = "";
-
-      document.getElementById('confirmationMessage').textContent = "Commande envoyée avec succès !";
-    });
-  </script>
 </body>
 </html>
+
