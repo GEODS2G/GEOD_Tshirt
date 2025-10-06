@@ -267,7 +267,8 @@
 
     const bouton = e.target.querySelector("button");
     bouton.disabled = true;
-
+    bouton.textContent = "Envoi en cours...";
+    
     const formData = new FormData(e.target);
 
     fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec", {
@@ -286,6 +287,7 @@
       document.querySelector('input[name="quantite"]').value = "1";
 
       document.getElementById("previewCombined").innerHTML = "";
+      bouton.textContent = "Envoyer la commande";
       bouton.disabled = false;
       envoiEnCours = false;
     })
@@ -304,6 +306,7 @@
 </script>
 </body>
 </html>
+
 
 
 
