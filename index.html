@@ -289,7 +289,7 @@
       document.querySelector('select[name="style"]').value = "";
       document.querySelector('select[name="taille"]').value = "";
       document.querySelector('input[name="quantite"]').value = "1";
-      document.querySelector('textarea[name="remarques"]').value = "";
+      e.target.querySelector('textarea[name="remarques"]').value = "";
       document.getElementById("previewCombined").innerHTML = "";
       bouton.textContent = "Envoyer la commande";
       bouton.disabled = false;
@@ -310,6 +310,7 @@
 </script>
 </body>
 </html>
+
 
 
 
