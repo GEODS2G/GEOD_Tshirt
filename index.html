@@ -194,104 +194,104 @@
     <p id="confirmationMessage"></p>
   </div>
 
-  <script>
-    let envoiEnCours = false;
+ <script>
+  let envoiEnCours = false;
 
-    const idMap = {
-      "debardeur_blue_lady": "https://i.imgur.com/Hdqhv78.jpg",
-      "debardeur_conspiracy": "https://i.imgur.com/WX8ct1w.jpg",
-      "debardeur_geod_couverture_cd": "https://i.imgur.com/gBWuJXJ.jpg",
-      "debardeur_more": "https://i.imgur.com/OTo04mh.jpg",
-      "debardeur_rattlesnakes_stone": "https://i.imgur.com/ZWhh2c1.jpg",
-      "debardeur_short_to_ground": "https://i.imgur.com/7ZzqV6o.jpg",
-      "femme_blue_lady": "https://i.imgur.com/4cb4Ysa.jpg",
-      "femme_conspiracy": "https://i.imgur.com/bzjcXWW.jpg",
-      "femme_geod_couverture_cd": "https://i.imgur.com/qRsypOr.jpg",
-      "femme_more": "https://i.imgur.com/swfdD2w.jpg",
-      "femme_rattlesnakes_stone": "https://i.imgur.com/9TlVHOO.jpg",
-      "femme_short_to_ground": "https://i.imgur.com/6aij7nd.jpg",
-      "homme_blue_lady": "https://i.imgur.com/eTcuvEQ.jpg",
-      "homme_conspiracy": "https://i.imgur.com/gmlqMG4.jpg",
-      "homme_geod_couverture_cd": "https://i.imgur.com/ElmFdIk.jpg",
-      "homme_more": "https://i.imgur.com/yI4UWr7.jpg",
-      "homme_rattlesnakes_stone": "https://i.imgur.com/TEmZAEt.jpg",
-      "homme_short_to_ground": "https://i.imgur.com/5cDO1p3.jpg"
+  const idMap = {
+    "debardeur_blue_lady": "https://i.imgur.com/Hdqhv78.jpg",
+    "debardeur_conspiracy": "https://i.imgur.com/WX8ct1w.jpg",
+    "debardeur_geod_couverture_cd": "https://i.imgur.com/gBWuJXJ.jpg",
+    "debardeur_more": "https://i.imgur.com/OTo04mh.jpg",
+    "debardeur_rattlesnakes_stone": "https://i.imgur.com/ZWhh2c1.jpg",
+    "debardeur_short_to_ground": "https://i.imgur.com/7ZzqV6o.jpg",
+    "femme_blue_lady": "https://i.imgur.com/4cb4Ysa.jpg",
+    "femme_conspiracy": "https://i.imgur.com/bzjcXWW.jpg",
+    "femme_geod_couverture_cd": "https://i.imgur.com/qRsypOr.jpg",
+    "femme_more": "https://i.imgur.com/swfdD2w.jpg",
+    "femme_rattlesnakes_stone": "https://i.imgur.com/9TlVHOO.jpg",
+    "femme_short_to_ground": "https://i.imgur.com/6aij7nd.jpg",
+    "homme_blue_lady": "https://i.imgur.com/eTcuvEQ.jpg",
+    "homme_conspiracy": "https://i.imgur.com/gmlqMG4.jpg",
+    "homme_geod_couverture_cd": "https://i.imgur.com/ElmFdIk.jpg",
+    "homme_more": "https://i.imgur.com/yI4UWr7.jpg",
+    "homme_rattlesnakes_stone": "https://i.imgur.com/TEmZAEt.jpg",
+    "homme_short_to_ground": "https://i.imgur.com/5cDO1p3.jpg"
+  };
+
+  function getImageUrl(modele, style) {
+    const modeleMap = {
+      "T-shirt homme Fruit of the Loom": "homme",
+      "T-shirt femme Fruit of the Loom": "femme",
+      "Débardeur femme Fruit of the Loom": "debardeur"
     };
+    const modeleKey = modeleMap[modele];
+    if (!modeleKey) return null;
 
-    function getImageUrl(modele, style) {
-      const modeleMap = {
-        "T-shirt homme Fruit of the Loom": "homme",
-        "T-shirt femme Fruit of the Loom": "femme",
-        "Débardeur femme Fruit of the Loom": "debardeur"
-      };
-      const modeleKey = modeleMap[modele];
-      if (!modeleKey) return null;
+    const styleKey = style
+      .toLowerCase()
+      .replace(/'/g, '')
+      .replace(/ /g, '_')
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      const styleKey = style
-        .toLowerCase()
-        .replace(/'/g, '') // retire l'apostrophe
-        .replace(/ /g, '_')
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const finalKey = `${modeleKey}_${styleKey}`;
+    return idMap[finalKey] || null;
+  }
 
-      const finalKey = `${
-              const finalKey = `${modeleKey}_${styleKey}`;
-      return idMap[finalKey] || null;
+  function updatePreview() {
+    const modele = document.querySelector('select[name="modele"]').value;
+    const style = document.querySelector('select[name="style"]').value;
+    const imageUrl = getImageUrl(modele, style);
+
+    if (imageUrl) {
+      document.getElementById("previewCombined").innerHTML =
+        `<h4>Aperçu :</h4><img src="${imageUrl}" alt="Prévisualisation">`;
+    } else {
+      document.getElementById("previewCombined").innerHTML = "";
     }
+  }
 
-    function updatePreview() {
-      const modele = document.querySelector('select[name="modele"]').value;
-      const style = document.querySelector('select[name="style"]').value;
-      const imageUrl = getImageUrl(modele, style);
+  document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
+  document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
 
-      if (imageUrl) {
-        document.getElementById("previewCombined").innerHTML =
-          `<h4>Aperçu :</h4><img src="${imageUrl}" alt="Prévisualisation">`;
-      } else {
-        document.getElementById("previewCombined").innerHTML = "";
-      }
-    }
+  document.getElementById('commandeForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (envoiEnCours) return;
+    envoiEnCours = true;
 
-    document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
-    document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
+    const bouton = e.target.querySelector("button");
+    bouton.disabled = true;
 
-    document.getElementById('commandeForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (envoiEnCours) return;
-      envoiEnCours = true;
+    const data = new FormData(e.target);
+    const params = new URLSearchParams(data);
 
-      const bouton = e.target.querySelector("button");
-      bouton.disabled = true;
-
-      const data = new FormData(e.target);
-      const params = new URLSearchParams(data);
-
-      fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec", {
       method: "POST",
       body: params
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert("✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.");
-        document.getElementById("confirmationMessage").textContent =
-          "✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.";
+    })
+    .then(res => res.text())
+    .then(msg => {
+      alert("✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.");
+      document.getElementById("confirmationMessage").textContent =
+        "✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.";
 
-        // Réinitialise uniquement les champs modèle, style, taille et quantité
-        document.querySelector('select[name="modele"]').value = "";
-        document.querySelector('select[name="style"]').value = "";
-        document.querySelector('select[name="taille"]').value = "";
-        document.querySelector('input[name="quantite"]').value = "";
+      document.querySelector('select[name="modele"]').value = "";
+      document.querySelector('select[name="style"]').value = "";
+      document.querySelector('select[name="taille"]').value = "";
+      document.querySelector('input[name="quantite"]').value = "";
 
-        document.getElementById("previewCombined").innerHTML = "";
-        bouton.disabled = false;
-        envoiEnCours = false;
-      })
-      .catch(err => {
-        alert("❌ Erreur lors de l'envoi de la commande.");
-        console.error("Erreur :", err);
-        bouton.disabled = false;
-        envoiEnCours = false;
-      });
+      document.getElementById("previewCombined").innerHTML = "";
+      bouton.disabled = false;
+      envoiEnCours = false;
+    })
+    .catch(err => {
+      alert("❌ Erreur lors de l'envoi de la commande.");
+      console.error("Erreur :", err);
+      bouton.disabled = false;
+      envoiEnCours = false;
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
+
