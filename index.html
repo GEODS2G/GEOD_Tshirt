@@ -276,7 +276,7 @@
       document.querySelector('select[name="modele"]').value = "";
       document.querySelector('select[name="style"]').value = "";
       document.querySelector('select[name="taille"]').value = "";
-      document.querySelector('input[name="quantite"]').value = "";
+      document.querySelector('input[name="quantite"]').value = "1";
 
       document.getElementById("previewCombined").innerHTML = "";
       bouton.disabled = false;
@@ -289,9 +289,15 @@
       envoiEnCours = false;
     });
   });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector('input[name="quantite"]').value = "1";
+  });
+
 </script>
 </body>
 </html>
+
 
 
 
