@@ -196,66 +196,73 @@
   </div>
 
   <script>
-    const idMap = {
-      "debardeur_blue_lady": "https://i.imgur.com/Hdqhv78.jpg",
-      "debardeur_conspiracy": "https://i.imgur.com/WX8ct1w.jpg",
-      "debardeur_geod_couverture_cd": "https://i.imgur.com/gBWuJXJ.jpg",
-      "debardeur_more": "https://i.imgur.com/OTo04mh.jpg",
-      "debardeur_rattlesnakes_stone": "https://i.imgur.com/ZWhh2c1.jpg",
-      "debardeur_short_to_ground": "https://i.imgur.com/7ZzqV6o.jpg",
-      "femme_blue_lady": "https://i.imgur.com/4cb4Ysa.jpg",
-      "femme_conspiracy": "https://i.imgur.com/bzjcXWW.jpg",
-      "femme_geod_couverture_cd": "https://i.imgur.com/qRsypOr.jpg",
-      "femme_more": "https://i.imgur.com/swfdD2w.jpg",
-      "femme_rattlesnakes_stone": "https://i.imgur.com/9TlVHOO.jpg",
-      "femme_short_to_ground": "https://i.imgur.com/6aij7nd.jpg",
-      "homme_blue_lady": "https://i.imgur.com/eTcuvEQ.jpg",
-      "homme_conspiracy": "https://i.imgur.com/gmlqMG4.jpg",
-      "homme_geod_couverture_cd": "https://i.imgur.com/ElmFdIk.jpg",
-      "homme_more": "https://i.imgur.com/yI4UWr7.jpg",
-      "homme_rattlesnakes_stone": "https://i.imgur.com/TEmZAEt.jpg",
-      "homme_short_to_ground": "https://i.imgur.com/5cDO1p3.jpg"
-    };
+  const idMap = {
+    "debardeur_blue_lady": "https://i.imgur.com/Hdqhv78.jpg",
+    "debardeur_conspiracy": "https://i.imgur.com/WX8ct1w.jpg",
+    "debardeur_geod_couverture_cd": "https://i.imgur.com/gBWuJXJ.jpg",
+    "debardeur_more": "https://i.imgur.com/OTo04mh.jpg",
+    "debardeur_rattlesnakes_stone": "https://i.imgur.com/ZWhh2c1.jpg",
+    "debardeur_short_to_ground": "https://i.imgur.com/7ZzqV6o.jpg",
+    "femme_blue_lady": "https://i.imgur.com/4cb4Ysa.jpg",
+    "femme_conspiracy": "https://i.imgur.com/bzjcXWW.jpg",
+    "femme_geod_couverture_cd": "https://i.imgur.com/qRsypOr.jpg",
+    "femme_more": "https://i.imgur.com/swfdD2w.jpg",
+    "femme_rattlesnakes_stone": "https://i.imgur.com/9TlVHOO.jpg",
+    "femme_short_to_ground": "https://i.imgur.com/6aij7nd.jpg",
+    "homme_blue_lady": "https://i.imgur.com/eTcuvEQ.jpg",
+    "homme_conspiracy": "https://i.imgur.com/gmlqMG4.jpg",
+    "homme_geod_couverture_cd": "https://i.imgur.com/ElmFdIk.jpg",
+    "homme_more": "https://i.imgur.com/yI4UWr7.jpg",
+    "homme_rattlesnakes_stone": "https://i.imgur.com/TEmZAEt.jpg",
+    "homme_short_to_ground": "https://i.imgur.com/5cDO1p3.jpg"
+  };
 
-    function updatePreview() {
-      const modele = document.querySelector('select[name="modele"]').value;
-      const style = document.querySelector('select[name="style"]').value;
-      const preview = document.getElementById('previewCombined');
+  function updatePreview() {
+    const modele = document.querySelector('select[name="modele"]').value;
+    const style = document.querySelector('select[name="style"]').value;
+    const preview = document.getElementById('previewCombined');
 
-      if (!modele || !style) {
-        preview.innerHTML = '';
-        return;
-      }
-
-      let prefix = '';
-      if (modele.includes('homme')) prefix = 'homme';
-      else if (modele.includes('femme')) prefix = 'femme';
-      else if (modele.includes('Débardeur')) prefix = 'debardeur';
-
-      const suffix = style.toLowerCase()
-        .replace(/
-              const suffix = style.toLowerCase()
-        .replace(/'/g, '') // retirer l'apostrophe
-        .replace(/ /g, '_')
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // retirer les accents
-
-      const key = `${prefix}_${suffix}`;
-      const imageUrl = idMap[key];
-
-      if (imageUrl) {
-        preview.innerHTML = `<img src="${imageUrl}" alt="${style}" />`;
-      } else {
-        preview.innerHTML = `<p style="color:red;">Aucun aperçu disponible pour ce modèle/style.</p>`;
-      }
+    if (!modele || !style) {
+      preview.innerHTML = '';
+      return;
     }
 
-    document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
-    document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
+    let prefix = '';
+    if (modele === "T-shirt homme Fruit of the Loom") prefix = "homme";
+    else if (modele === "T-shirt femme Fruit of the Loom") prefix = "femme";
+    else if (modele === "Débardeur femme Fruit of the Loom") prefix = "debardeur";
 
-    document.getElementById('commandeForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+    const suffix = style
+      .toLowerCase()
+      .replace(/'/g, '') // retire l'apostrophe
+      .replace(/ /g, '_')
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // retire les accents
 
-      // Envoi vers Google Sheets ici…
+    const key = `${prefix}_${suffix}`;
+    const imageUrl = idMap[key];
+
+    if (imageUrl) {
+      preview.innerHTML = `<img src="${imageUrl}" alt="${style}" />`;
+    } else {
+      preview.innerHTML = `<p style="color:red;">Aucun aperçu disponible pour ce modèle/style.</p>`;
+    }
+  }
+
+  document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
+  document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
+
+  document.getElementById('commandeForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch("https://script.google.com/macros/s/TON_ID_SCRIPT/exec", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('confirmationMessage').textContent = "Commande envoyée avec succès !";
 
       // Réinitialisation partielle
       document.querySelector('select[name="modele"]').value = "";
@@ -263,9 +270,14 @@
       document.querySelector('select[name="taille"]').value = "";
       document.querySelector('input[name="quantite"]').value = "";
       document.getElementById('previewCombined').innerHTML = "";
-
-      document.getElementById('confirmationMessage').textContent = "Commande envoyée avec succès !";
+    })
+    .catch(error => {
+      document.getElementById('confirmationMessage').textContent = "Erreur lors de l'envoi.";
+      console.error("Erreur :", error);
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
+
