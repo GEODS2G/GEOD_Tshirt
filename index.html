@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Commande T-shirt</title>
+  <title>Commande T-shirt GEOD</title>
   <style>
     body {
       font-family: sans-serif;
@@ -35,7 +35,7 @@
     .container {
       max-width: 480px;
       margin: auto;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.7);
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -59,9 +59,9 @@
 
     input, select {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      font-size: 16px;
+      padding: 6px;
+      margin-top: 4px;
+      font-size: 15px;
       box-sizing: border-box;
     }
 
@@ -82,7 +82,7 @@
     }
 
     #previewCombined {
-      margin-top: 20px;
+      margin-top: 15px;
       text-align: center;
     }
 
@@ -167,6 +167,8 @@
         <option value="More">More</option>
       </select>
 
+      <div id="previewCombined"></div>
+
       <div class="row">
         <div class="half">
           <label>Taille</label>
@@ -188,9 +190,9 @@
       <button type="submit">Envoyer la commande</button>
     </form>
 
-    <div id="previewCombined"></div>
     <p id="confirmationMessage"></p>
   </div>
+
  <script>
   let envoiEnCours = false;
 
