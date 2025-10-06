@@ -218,36 +218,35 @@
     };
 
     function updatePreview() {
-      const modele = document.querySelector('select[name="modele"]').value;
-      const style = document.querySelector('select[name="style"]').value;
-      const preview = document.getElementById('previewCombined');
+  const modele = document.querySelector('select[name="modele"]').value;
+  const style = document.querySelector('select[name="style"]').value;
+  const preview = document.getElementById('previewCombined');
 
-      if (!modele || !style) {
-        preview.innerHTML = '';
-        return;
-      }
+  if (!modele || !style) {
+    preview.innerHTML = '';
+    return;
+  }
 
-      let prefix = '';
-      if (modele.includes('homme')) prefix = 'homme';
-      else if (modele.includes('femme')) prefix = 'femme';
-      else if (modele.includes('Débardeur')) prefix = 'debardeur';
+  let prefix = '';
+  if (modele.includes('homme')) prefix = 'homme';
+  else if (modele.includes('femme')) prefix = 'femme';
+  else if (modele.includes('Débardeur')) prefix = 'debardeur';
 
-      const suffix = style.toLowerCase()
-        .replace(/
-              const suffix = style.toLowerCase()
-        .replace(/'/g, '') // retirer l'apostrophe
-        .replace(/ /g, '_')
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // retirer les accents
+  const suffix = style.toLowerCase()
+    .replace(/'/g, '') // retire l'apostrophe
+    .replace(/ /g, '_')
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // retire les accents
 
-      const key = `${prefix}_${suffix}`;
-      const imageUrl = idMap[key];
+  const key = `${prefix}_${suffix}`;
+  const imageUrl = idMap[key];
 
-      if (imageUrl) {
-        preview.innerHTML = `<img src="${imageUrl}" alt="${style}" />`;
-      } else {
-        preview.innerHTML = `<p style="color:red;">Aucun aperçu disponible pour ce modèle/style.</p>`;
-      }
-    }
+  if (imageUrl) {
+    preview.innerHTML = `<img src="${imageUrl}" alt="${style}" />`;
+  } else {
+    preview.innerHTML = `<p style="color:red;">Aucun aperçu disponible pour ce modèle/style.</p>`;
+  }
+}
+
 
     document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
     document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
@@ -269,3 +268,4 @@
   </script>
 </body>
 </html>
+
