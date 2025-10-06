@@ -45,10 +45,12 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      max-width: 100%;
     }
 
     .half {
       flex: 1 1 48%;
+      min-width: 140px;
     }
 
     label {
@@ -149,50 +151,6 @@
       </div>
 
       <label>Modèle</label>
-      <select name="modele" required>
-        <option value="">-- Choisir --</option>
-        <option value="T-shirt homme Fruit of the Loom">T-shirt homme Fruit of the Loom</option>
-        <option value="T-shirt femme Fruit of the Loom">T-shirt femme Fruit of the Loom</option>
-        <option value="Débardeur femme Fruit of the Loom">Débardeur femme Fruit of the Loom</option>
-      </select>
-
-      <label>Style</label>
-      <select name="style" required>
-        <option value="">-- Choisir --</option>
-        <option value="GEOD couverture CD">GEOD couverture CD</option>
-        <option value="Short to ground">Short to ground</option>
-        <option value="Blue lady">Blue lady</option>
-        <option value="Conspiracy">Conspiracy</option>
-        <option value="Rattlesnakes stone">Rattlesnakes stone</option>
-        <option value="More">More</option>
-      </select>
-
-      <div id="previewCombined"></div>
-
-      <div class="row">
-        <div class="half">
-          <label>Taille</label>
-          <select name="taille" required>
-            <option value="">-- Choisir --</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </select>
-        </div>
-        <div class="half">
-          <label>Quantité</label>
-          <input type="number" name="quantite" min="1" required />
-        </div>
-      </div>
-
-      <button type="submit">Envoyer la commande</button>
-    </form>
-
-    <p id="confirmationMessage"></p>
-  </div>
-
  <script>
   let envoiEnCours = false;
 
@@ -288,3 +246,4 @@
 
 </body>
 </html>
+
