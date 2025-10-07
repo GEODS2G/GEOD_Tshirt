@@ -60,11 +60,6 @@
     text-align: left;
     margin-left: 2px;
   }
-  @media (max-width: 420px) {
-    .row { flex-direction: column; }
-    .pair { flex: 1 1 100% !important; }
-    label { font-size: 17px; flex: 0 0 80px; }
-  }
   input, select, textarea {
     flex: 1;
     min-width: 0;
@@ -137,6 +132,20 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  /* Mobile responsive : garder champs sur la même ligne */
+  @media (max-width: 420px) {
+    .row {
+      flex-direction: row; /* garder les champs sur la même ligne */
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .pair {
+      flex: 1 1 48%;
+      min-width: 120px;
+    }
+    label { font-size: 16px; flex: 0 0 60px; }
   }
 </style>
 </head>
