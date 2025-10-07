@@ -9,6 +9,7 @@
     font-family: sans-serif;
     margin: 0;
     background: #f0f0f0;
+    padding-bottom: 60px; /* pour que le bouton ne touche pas le bas sur mobile */
   }
   .background-blur {
     position: fixed;
@@ -52,11 +53,17 @@
     min-width: 130px;
   }
   label {
-    font-size: 13px;
+    font-size: 16px; /* taille augmentée pour meilleure lisibilité */
     white-space: nowrap;
-    flex: 0 0 70px;  /* largeur fixe pour alignement vertical */
-    text-align: left; /* on aligne à gauche */
+    flex: 0 0 70px;
+    text-align: left;
     margin-left: 2px;
+  }
+  @media (max-width: 400px) {
+    label {
+      font-size: 17px;
+      flex: 0 0 80px;
+    }
   }
   input, select, textarea {
     flex: 1;
@@ -110,22 +117,40 @@
 <form id="commandeForm">
 
   <div class="row">
-    <div class="pair"><label>Nom</label><input name="nom" required></div>
-    <div class="pair"><label>Prénom</label><input name="prenom" required></div>
+    <div class="pair">
+      <label for="nom">Nom</label>
+      <input id="nom" name="nom" required placeholder="Ex : Dupont">
+    </div>
+    <div class="pair">
+      <label for="prenom">Prénom</label>
+      <input id="prenom" name="prenom" required placeholder="Ex : Alice">
+    </div>
   </div>
 
-  <div class="pair"><label>Email</label><input type="email" name="email" required></div>
-  <div class="pair"><label>Rue</label><input name="rue" required></div>
-
-  <div class="row">
-    <div class="pair"><label>CP</label><input name="code_postal" required></div>
-    <div class="pair"><label>Ville</label><input name="ville" required></div>
+  <div class="pair">
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" required placeholder="exemple@mail.com">
+  </div>
+  <div class="pair">
+    <label for="rue">Rue</label>
+    <input id="rue" name="rue" required placeholder="Ex : 12 rue du Lac">
   </div>
 
   <div class="row">
     <div class="pair">
-      <label>Modèle</label>
-      <select name="modele" required>
+      <label for="code_postal">CP</label>
+      <input id="code_postal" name="code_postal" required placeholder="Ex : 75001">
+    </div>
+    <div class="pair">
+      <label for="ville">Ville</label>
+      <input id="ville" name="ville" required placeholder="Ex : Paris">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="pair">
+      <label for="modele">Modèle</label>
+      <select id="modele" name="modele" required>
         <option value="">--</option>
         <option value="T-shirt homme Fruit of the Loom">T-shirt homme Fruit of the Loom</option>
         <option value="T-shirt femme Fruit of the Loom">T-shirt femme Fruit of the Loom</option>
@@ -133,8 +158,8 @@
       </select>
     </div>
     <div class="pair">
-      <label>Style</label>
-      <select name="style" required>
+      <label for="style">Style</label>
+      <select id="style" name="style" required>
         <option value="">--</option>
         <option value="GEOD couverture CD">GEOD couverture CD</option>
         <option value="Short to ground">Short to ground</option>
@@ -152,21 +177,21 @@
 
   <div class="row">
     <div class="pair">
-      <label>Taille</label>
-      <select name="taille" required>
+      <label for="taille">Taille</label>
+      <select id="taille" name="taille" required>
         <option value="">--</option>
         <option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
       </select>
     </div>
     <div class="pair">
-      <label>Qté</label>
-      <input type="number" name="quantite" value="1" min="1" required>
+      <label for="quantite">Qté</label>
+      <input id="quantite" type="number" name="quantite" value="1" min="1" required>
     </div>
   </div>
 
   <div class="pair" style="flex:1 1 100%;">
-    <label>Remarques</label>
-    <textarea name="remarques" rows="2" placeholder="Ex : demande spéciale, contact, etc."></textarea>
+    <label for="remarques">Remarques</label>
+    <textarea id="remarques" name="remarques" rows="2" placeholder="Ex : demande spéciale, contact, etc."></textarea>
   </div>
 
   <button type="submit">Envoyer la commande</button>
@@ -210,19 +235,37 @@ function updatePreview(){
 }
 document.querySelector('select[name="modele"]').addEventListener('change',updatePreview);
 document.querySelector('select[name="style"]').addEventListener('change',updatePreview);
+
 document.getElementById('commandeForm').addEventListener('submit',function(e){
-  e.preventDefault(); if(envoiEnCours)return; envoiEnCours=true;
+  e.preventDefault(); 
+  if(envoiEnCours) return; 
+  envoiEnCours=true;
   const b=e.target.querySelector("button");
-  b.textContent="Envoi..."; b.disabled=true;
+  b.textContent="Envoi..."; 
+  b.disabled=true;
   const formData=new FormData(e.target);
   fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec",{method:"POST",body:formData})
   .then(r=>r.text()).then(()=>{
-    document.getElementById("confirmationMessage").textContent="✅ Commande enregistrée !";
-    e.target.reset(); updatePreview();
-    b.textContent="Envoyer la commande"; b.disabled=false; envoiEnCours=false;
+    const msg=document.getElementById("confirmationMessage");
+    msg.textContent="✅ Commande enregistrée !";
+
+    // ---- Modification ici : ne réinitialiser que Modèle / Style / Taille / Qté ----
+    e.target.querySelector('select[name="modele"]').value = "";
+    e.target.querySelector('select[name="style"]').value = "";
+    e.target.querySelector('select[name="taille"]').value = "";
+    e.target.querySelector('input[name="quantite"]').value = 1;
+    updatePreview(); // remet l'image par défaut
+
+    b.textContent="Envoyer la commande"; 
+    b.disabled=false; 
+    envoiEnCours=false;
+    setTimeout(()=>{ msg.textContent=""; },5000);
   }).catch(err=>{
-    alert("Erreur d'envoi"); console.error(err);
-    b.textContent="Envoyer la commande"; b.disabled=false; envoiEnCours=false;
+    alert("Erreur d'envoi"); 
+    console.error(err);
+    b.textContent="Envoyer la commande"; 
+    b.disabled=false; 
+    envoiEnCours=false;
   });
 });
 </script>
