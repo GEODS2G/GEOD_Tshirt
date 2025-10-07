@@ -9,7 +9,7 @@
     font-family: sans-serif;
     margin: 0;
     background: #f0f0f0;
-    padding-bottom: 60px; /* pour que le bouton ne touche pas le bas sur mobile */
+    padding-bottom: 60px;
   }
   .background-blur {
     position: fixed;
@@ -52,18 +52,18 @@
     flex: 1 1 48%;
     min-width: 130px;
   }
+  .pair.full { flex: 1 1 100%; }
   label {
-    font-size: 16px; /* taille augmentée pour meilleure lisibilité */
+    font-size: 16px;
     white-space: nowrap;
-    flex: 0 0 70px;
+    flex: 0 0 60px;
     text-align: left;
     margin-left: 2px;
   }
-  @media (max-width: 400px) {
-    label {
-      font-size: 17px;
-      flex: 0 0 80px;
-    }
+  @media (max-width: 420px) {
+    .row { flex-direction: column; }
+    .pair { flex: 1 1 100% !important; }
+    label { font-size: 17px; flex: 0 0 80px; }
   }
   input, select, textarea {
     flex: 1;
@@ -74,10 +74,7 @@
     border: 1px solid #bbb;
     box-sizing: border-box;
   }
-  textarea {
-    width: 100%;
-    resize: none;
-  }
+  textarea { width: 100%; resize: none; }
   .preview-box {
     margin-top: 4px;
     background: white;
@@ -86,10 +83,7 @@
     padding: 6px;
     text-align: center;
   }
-  .preview-box img {
-    width: 100%;
-    border-radius: 6px;
-  }
+  .preview-box img { width: 100%; border-radius: 6px; }
   button {
     width: 100%;
     margin-top: 4px;
@@ -99,13 +93,50 @@
     color: white;
     border: none;
     border-radius: 4px;
+    cursor: pointer;
   }
-  button:disabled { background: #999; }
-  #confirmationMessage {
+  button:disabled { background: #999; cursor: not-allowed; }
+
+  /* Modal avec animation */
+  .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.5); 
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .modal.show {
+    display: block;
+    opacity: 1;
+  }
+  .modal-content {
+    background-color: #fff;
+    margin: 15% auto; 
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 350px;
     text-align: center;
-    color: green;
-    font-weight: bold;
-    margin-top: 6px;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+  }
+  .modal.show .modal-content {
+    transform: translateY(0);
+  }
+  .modal-content button {
+    margin-top: 12px;
+    width: auto;
+    padding: 8px 16px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -117,39 +148,20 @@
 <form id="commandeForm">
 
   <div class="row">
-    <div class="pair">
-      <label for="nom">Nom</label>
-      <input id="nom" name="nom" required placeholder="Ex : Dupont">
-    </div>
-    <div class="pair">
-      <label for="prenom">Prénom</label>
-      <input id="prenom" name="prenom" required placeholder="Ex : Alice">
-    </div>
+    <div class="pair"><label for="nom">Nom</label><input id="nom" name="nom" placeholder="Ex: Dupont" required></div>
+    <div class="pair"><label for="prenom">Prénom</label><input id="prenom" name="prenom" placeholder="Ex: Marie" required></div>
   </div>
 
-  <div class="pair">
-    <label for="email">Email</label>
-    <input id="email" type="email" name="email" required placeholder="exemple@mail.com">
-  </div>
-  <div class="pair">
-    <label for="rue">Rue</label>
-    <input id="rue" name="rue" required placeholder="Ex : 12 rue du Lac">
+  <div class="pair full"><label for="email">Email</label><input id="email" type="email" name="email" placeholder="Ex: email@mail.com" required></div>
+  <div class="pair full"><label for="rue">Rue</label><input id="rue" name="rue" placeholder="Ex: 12 rue Exemple" required></div>
+
+  <div class="row">
+    <div class="pair"><label for="code_postal">CP</label><input id="code_postal" name="code_postal" placeholder="Ex: 75001" required></div>
+    <div class="pair"><label for="ville">Ville</label><input id="ville" name="ville" placeholder="Ex: Paris" required></div>
   </div>
 
   <div class="row">
-    <div class="pair">
-      <label for="code_postal">CP</label>
-      <input id="code_postal" name="code_postal" required placeholder="Ex : 75001">
-    </div>
-    <div class="pair">
-      <label for="ville">Ville</label>
-      <input id="ville" name="ville" required placeholder="Ex : Paris">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <label for="modele">Modèle</label>
+    <div class="pair"><label for="modele">Modèle</label>
       <select id="modele" name="modele" required>
         <option value="">--</option>
         <option value="T-shirt homme Fruit of the Loom">T-shirt homme Fruit of the Loom</option>
@@ -157,8 +169,7 @@
         <option value="Débardeur femme Fruit of the Loom">Débardeur femme Fruit of the Loom</option>
       </select>
     </div>
-    <div class="pair">
-      <label for="style">Style</label>
+    <div class="pair"><label for="style">Style</label>
       <select id="style" name="style" required>
         <option value="">--</option>
         <option value="GEOD couverture CD">GEOD couverture CD</option>
@@ -176,32 +187,37 @@
   </div>
 
   <div class="row">
-    <div class="pair">
-      <label for="taille">Taille</label>
+    <div class="pair"><label for="taille">Taille</label>
       <select id="taille" name="taille" required>
         <option value="">--</option>
         <option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
       </select>
     </div>
-    <div class="pair">
-      <label for="quantite">Qté</label>
+    <div class="pair"><label for="quantite">Qté</label>
       <input id="quantite" type="number" name="quantite" value="1" min="1" required>
     </div>
   </div>
 
-  <div class="pair" style="flex:1 1 100%;">
-    <label for="remarques">Remarques</label>
+  <div class="pair full"><label for="remarques">Remarques</label>
     <textarea id="remarques" name="remarques" rows="2" placeholder="Ex : demande spéciale, contact, etc."></textarea>
   </div>
 
   <button type="submit">Envoyer la commande</button>
 </form>
-<p id="confirmationMessage"></p>
+</div>
+
+<!-- Modal -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <p>✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.</p>
+    <button id="closeModal">OK</button>
+  </div>
 </div>
 
 <script>
-let envoiEnCours=false;
-const idMap={
+let envoiEnCours = false;
+
+const idMap = {
   "debardeur_blue_lady":"https://i.imgur.com/Hdqhv78.jpg",
   "debardeur_conspiracy":"https://i.imgur.com/WX8ct1w.jpg",
   "debardeur_geod_couverture_cd":"https://i.imgur.com/gBWuJXJ.jpg",
@@ -221,51 +237,70 @@ const idMap={
   "homme_rattlesnakes_stone":"https://i.imgur.com/TEmZAEt.jpg",
   "homme_short_to_ground":"https://i.imgur.com/5cDO1p3.jpg"
 };
+
 function getImageUrl(m,s){
   const map={"T-shirt homme Fruit of the Loom":"homme","T-shirt femme Fruit of the Loom":"femme","Débardeur femme Fruit of the Loom":"debardeur"};
   const mk=map[m]; if(!mk) return null;
   const sk=s.toLowerCase().replace(/'/g,'').replace(/ /g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g,'');
   return idMap[`${mk}_${sk}`]||null;
 }
+
 function updatePreview(){
   const m=document.querySelector('select[name="modele"]').value;
   const s=document.querySelector('select[name="style"]').value;
   const url=getImageUrl(m,s);
-  document.getElementById("previewImage").src=url||"https://i.imgur.com/iYKlO99.jpg";
+  document.getElementById("previewImage").src = url || "https://i.imgur.com/iYKlO99.jpg";
 }
+
 document.querySelector('select[name="modele"]').addEventListener('change',updatePreview);
 document.querySelector('select[name="style"]').addEventListener('change',updatePreview);
 
-document.getElementById('commandeForm').addEventListener('submit',function(e){
-  e.preventDefault(); 
-  if(envoiEnCours) return; 
-  envoiEnCours=true;
-  const b=e.target.querySelector("button");
-  b.textContent="Envoi..."; 
-  b.disabled=true;
-  const formData=new FormData(e.target);
-  fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec",{method:"POST",body:formData})
-  .then(r=>r.text()).then(()=>{
-    const msg=document.getElementById("confirmationMessage");
-    msg.textContent="✅ Commande enregistrée !";
+// Modal functions
+function showModal() {
+  const modal = document.getElementById("confirmationModal");
+  modal.style.display = "block";
+  setTimeout(() => modal.classList.add("show"), 10); // trigger animation
+}
 
-    // ---- Modification ici : ne réinitialiser que Modèle / Style / Taille / Qté ----
+function closeModal() {
+  const modal = document.getElementById("confirmationModal");
+  modal.classList.remove("show");
+  setTimeout(() => { modal.style.display = "none"; }, 300);
+}
+
+document.getElementById("closeModal").addEventListener("click", closeModal);
+
+document.getElementById('commandeForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  if(envoiEnCours) return;
+  envoiEnCours = true;
+
+  const b = e.target.querySelector("button");
+  b.textContent = "Envoi...";
+  b.disabled = true;
+
+  const formData = new FormData(e.target);
+  fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec",{method:"POST",body:formData})
+  .then(r => r.text()).then(() => {
+    showModal(); // pop-up animé
+
+    // Réinitialiser uniquement Modèle / Style / Taille / Qté / Remarques
     e.target.querySelector('select[name="modele"]').value = "";
     e.target.querySelector('select[name="style"]').value = "";
     e.target.querySelector('select[name="taille"]').value = "";
     e.target.querySelector('input[name="quantite"]').value = 1;
-    updatePreview(); // remet l'image par défaut
+    e.target.querySelector('textarea[name="remarques"]').value = "";
+    updatePreview();
 
-    b.textContent="Envoyer la commande"; 
-    b.disabled=false; 
-    envoiEnCours=false;
-    setTimeout(()=>{ msg.textContent=""; },5000);
+    b.textContent = "Envoyer la commande";
+    b.disabled = false;
+    envoiEnCours = false;
   }).catch(err=>{
-    alert("Erreur d'envoi"); 
+    alert("Erreur d'envoi");
     console.error(err);
-    b.textContent="Envoyer la commande"; 
-    b.disabled=false; 
-    envoiEnCours=false;
+    b.textContent = "Envoyer la commande";
+    b.disabled = false;
+    envoiEnCours = false;
   });
 });
 </script>
