@@ -1,314 +1,230 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Commande T-shirt GEOD</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f0f0;
-    }
-
-    .background-blur {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('https://i.imgur.com/iYKlO99.jpg');
-      background-size: cover;
-      background-position: center;
-      filter: blur(8px);
-      z-index: -1;
-    }
-
-    h2 {
-      text-align: center;
-      color: white;
-      text-shadow: 1px 1px 3px black;
-      margin: 15px 0;
-      font-size: 22px;
-    }
-
-    .container {
-      max-width: 420px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.85);
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.25);
-    }
-
-    .row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .half {
-      flex: 1;
-      min-width: 0;
-    }
-
-    label {
-      display: block;
-      margin-top: 8px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 6px;
-      margin-top: 3px;
-      font-size: 14px;
-      box-sizing: border-box;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      margin-top: 12px;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 15px;
-    }
-
-    button:hover { background: #0056b3; }
-    button:disabled { background: #999; cursor: not-allowed; }
-
-    #confirmationMessage {
-      text-align: center;
-      font-weight: bold;
-      color: green;
-      margin-top: 10px;
-    }
-
-    /* Prévisualisation placée sous modèle/style */
-    .preview-box {
-      margin-top: 10px;
-      background: rgba(255,255,255,0.9);
-      border-radius: 8px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.2);
-      padding: 8px;
-      text-align: center;
-    }
-
-    .preview-box h4 {
-      margin: 4px 0;
-      color: #333;
-      font-size: 15px;
-    }
-
-    .preview-box img {
-      width: 100%;
-      border-radius: 6px;
-    }
-
-    @media (max-width: 430px) {
-      body {
-        background-color: #f0f0f0;
-      }
-      .container {
-        width: 94%;
-        padding: 12px;
-      }
-      .row {
-        flex-wrap: nowrap; /* garde les champs côte à côte */
-      }
-      label, input, select {
-        font-size: 13px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commande T-shirt GEOD</title>
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 0;
+    background: #f0f0f0;
+  }
+  .background-blur {
+    position: fixed;
+    inset: 0;
+    background: url('https://i.imgur.com/iYKlO99.jpg') center/cover no-repeat;
+    filter: blur(8px);
+    z-index: -1;
+  }
+  h2 {
+    text-align: center;
+    color: white;
+    margin: 10px 0;
+    text-shadow: 1px 1px 3px black;
+    font-size: 20px;
+  }
+  .container {
+    width: 92%;
+    max-width: 420px;
+    margin: auto;
+    background: rgba(255,255,255,0.4);
+    padding: 12px 14px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    box-sizing: border-box;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pair {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1 1 48%;
+    min-width: 130px;
+  }
+  label {
+    font-size: 13px;
+    white-space: nowrap;
+    flex: 0 0 70px;  /* largeur fixe pour alignement vertical */
+    text-align: left; /* on aligne à gauche */
+    margin-left: 2px;
+  }
+  input, select, textarea {
+    flex: 1;
+    min-width: 0;
+    padding: 5px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+  }
+  textarea {
+    width: 100%;
+    resize: none;
+  }
+  .preview-box {
+    margin-top: 4px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
+    padding: 6px;
+    text-align: center;
+  }
+  .preview-box img {
+    width: 100%;
+    border-radius: 6px;
+  }
+  button {
+    width: 100%;
+    margin-top: 4px;
+    padding: 9px;
+    font-size: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  button:disabled { background: #999; }
+  #confirmationMessage {
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+</style>
 </head>
 <body>
-  <div class="background-blur"></div>
-  <h2>Commande T-shirt GEOD</h2>
+<div class="background-blur"></div>
+<h2>Commande T-shirt GEOD</h2>
 
-  <div class="container">
-    <form id="commandeForm">
+<div class="container">
+<form id="commandeForm">
 
-      <!-- NOM & PRENOM -->
-      <div class="row">
-        <div class="half">
-          <label>Nom</label>
-          <input type="text" name="nom" required />
-        </div>
-        <div class="half">
-          <label>Prénom</label>
-          <input type="text" name="prenom" required />
-        </div>
-      </div>
-
-      <label>Email</label>
-      <input type="email" name="email" required />
-
-      <label>Rue</label>
-      <input type="text" name="rue" required />
-
-      <!-- CODE POSTAL & VILLE -->
-      <div class="row">
-        <div class="half">
-          <label>Code postal</label>
-          <input type="text" name="code_postal" required />
-        </div>
-        <div class="half">
-          <label>Ville</label>
-          <input type="text" name="ville" required />
-        </div>
-      </div>
-
-      <!-- MODELE & STYLE -->
-      <div class="row">
-        <div class="half">
-          <label>Modèle</label>
-          <select name="modele" required>
-            <option value="">-- Choisir --</option>
-            <option value="T-shirt homme Fruit of the Loom">T-shirt homme</option>
-            <option value="T-shirt femme Fruit of the Loom">T-shirt femme</option>
-            <option value="Débardeur femme Fruit of the Loom">Débardeur femme</option>
-          </select>
-        </div>
-        <div class="half">
-          <label>Style</label>
-          <select name="style" required>
-            <option value="">-- Choisir --</option>
-            <option value="GEOD couverture CD">GEOD couverture CD</option>
-            <option value="Short to ground">Short to ground</option>
-            <option value="Blue lady">Blue lady</option>
-            <option value="Conspiracy">Conspiracy</option>
-            <option value="Rattlesnake's stone">Rattlesnake's stone</option>
-            <option value="More">More</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- FENÊTRE DE PRÉVISUALISATION -->
-      <div class="preview-box" id="previewBox">
-        <h4>Prévisualisation</h4>
-        <img id="previewImage" src="https://i.imgur.com/iYKlO99.jpg" alt="Prévisualisation T-shirt" />
-      </div>
-
-      <!-- TAILLE & QUANTITÉ -->
-      <div class="row">
-        <div class="half">
-          <label>Taille</label>
-          <select name="taille" required>
-            <option value="">-- Choisir --</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </select>
-        </div>
-        <div class="half">
-          <label>Quantité</label>
-          <input type="number" name="quantite" min="1" value="1" required />
-        </div>
-      </div>
-
-      <label>Remarques (optionnel)</label>
-      <textarea name="remarques" rows="3" placeholder="Ex : demande spéciale, contact, etc."></textarea>
-
-      <button type="submit">Envoyer la commande</button>
-    </form>
-
-    <p id="confirmationMessage"></p>
+  <div class="row">
+    <div class="pair"><label>Nom</label><input name="nom" required></div>
+    <div class="pair"><label>Prénom</label><input name="prenom" required></div>
   </div>
 
-  <script>
-    let envoiEnCours = false;
+  <div class="pair"><label>Email</label><input type="email" name="email" required></div>
+  <div class="pair"><label>Rue</label><input name="rue" required></div>
 
-    const idMap = {
-      "debardeur_blue_lady": "https://i.imgur.com/Hdqhv78.jpg",
-      "debardeur_conspiracy": "https://i.imgur.com/WX8ct1w.jpg",
-      "debardeur_geod_couverture_cd": "https://i.imgur.com/gBWuJXJ.jpg",
-      "debardeur_more": "https://i.imgur.com/OTo04mh.jpg",
-      "debardeur_rattlesnakes_stone": "https://i.imgur.com/ZWhh2c1.jpg",
-      "debardeur_short_to_ground": "https://i.imgur.com/7ZzqV6o.jpg",
-      "femme_blue_lady": "https://i.imgur.com/4cb4Ysa.jpg",
-      "femme_conspiracy": "https://i.imgur.com/bzjcXWW.jpg",
-      "femme_geod_couverture_cd": "https://i.imgur.com/qRsypOr.jpg",
-      "femme_more": "https://i.imgur.com/swfdD2w.jpg",
-      "femme_rattlesnakes_stone": "https://i.imgur.com/9TlVHOO.jpg",
-      "femme_short_to_ground": "https://i.imgur.com/6aij7nd.jpg",
-      "homme_blue_lady": "https://i.imgur.com/eTcuvEQ.jpg",
-      "homme_conspiracy": "https://i.imgur.com/gmlqMG4.jpg",
-      "homme_geod_couverture_cd": "https://i.imgur.com/ElmFdIk.jpg",
-      "homme_more": "https://i.imgur.com/yI4UWr7.jpg",
-      "homme_rattlesnakes_stone": "https://i.imgur.com/TEmZAEt.jpg",
-      "homme_short_to_ground": "https://i.imgur.com/5cDO1p3.jpg"
-    };
+  <div class="row">
+    <div class="pair"><label>CP</label><input name="code_postal" required></div>
+    <div class="pair"><label>Ville</label><input name="ville" required></div>
+  </div>
 
-    function getImageUrl(modele, style) {
-      const modeleMap = {
-        "T-shirt homme Fruit of the Loom": "homme",
-        "T-shirt femme Fruit of the Loom": "femme",
-        "Débardeur femme Fruit of the Loom": "debardeur"
-      };
-      const modeleKey = modeleMap[modele];
-      if (!modeleKey) return null;
+  <div class="row">
+    <div class="pair">
+      <label>Modèle</label>
+      <select name="modele" required>
+        <option value="">--</option>
+        <option value="T-shirt homme Fruit of the Loom">T-shirt homme Fruit of the Loom</option>
+        <option value="T-shirt femme Fruit of the Loom">T-shirt femme Fruit of the Loom</option>
+        <option value="Débardeur femme Fruit of the Loom">Débardeur femme Fruit of the Loom</option>
+      </select>
+    </div>
+    <div class="pair">
+      <label>Style</label>
+      <select name="style" required>
+        <option value="">--</option>
+        <option value="GEOD couverture CD">GEOD couverture CD</option>
+        <option value="Short to ground">Short to ground</option>
+        <option value="Blue lady">Blue lady</option>
+        <option value="Conspiracy">Conspiracy</option>
+        <option value="Rattlesnake's stone">Rattlesnake's stone</option>
+        <option value="More">More</option>
+      </select>
+    </div>
+  </div>
 
-      const styleKey = style
-        .toLowerCase()
-        .replace(/'/g, '')
-        .replace(/ /g, '_')
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  <div class="preview-box" id="previewBox">
+    <img id="previewImage" src="https://i.imgur.com/iYKlO99.jpg" alt="Prévisualisation">
+  </div>
 
-      return idMap[`${modeleKey}_${styleKey}`] || null;
-    }
+  <div class="row">
+    <div class="pair">
+      <label>Taille</label>
+      <select name="taille" required>
+        <option value="">--</option>
+        <option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+      </select>
+    </div>
+    <div class="pair">
+      <label>Qté</label>
+      <input type="number" name="quantite" value="1" min="1" required>
+    </div>
+  </div>
 
-    function updatePreview() {
-      const modele = document.querySelector('select[name="modele"]').value;
-      const style = document.querySelector('select[name="style"]').value;
-      const imageUrl = getImageUrl(modele, style);
-      document.getElementById("previewImage").src = imageUrl || "https://i.imgur.com/iYKlO99.jpg";
-    }
+  <div class="pair" style="flex:1 1 100%;">
+    <label>Remarques</label>
+    <textarea name="remarques" rows="2" placeholder="Ex : demande spéciale, contact, etc."></textarea>
+  </div>
 
-    document.querySelector('select[name="modele"]').addEventListener('change', updatePreview);
-    document.querySelector('select[name="style"]').addEventListener('change', updatePreview);
+  <button type="submit">Envoyer la commande</button>
+</form>
+<p id="confirmationMessage"></p>
+</div>
 
-    document.getElementById('commandeForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (envoiEnCours) return;
-      envoiEnCours = true;
-
-      const bouton = e.target.querySelector("button");
-      bouton.textContent = "Envoi en cours...";
-      bouton.disabled = true;
-
-      const formData = new FormData(e.target);
-
-      fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec", {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert("✅ Commande enregistrée !");
-        document.getElementById("confirmationMessage").textContent = "✅ Commande enregistrée. Veuillez vous rapprocher d’un membre du staff pour payer votre commande.";
-        e.target.reset();
-        document.getElementById("previewImage").src = "https://i.imgur.com/iYKlO99.jpg";
-        bouton.textContent = "Envoyer la commande";
-        bouton.disabled = false;
-        envoiEnCours = false;
-      })
-      .catch(err => {
-        alert("❌ Erreur lors de l'envoi de la commande.");
-        console.error("Erreur :", err);
-        bouton.disabled = false;
-        envoiEnCours = false;
-      });
-    });
-  </script>
+<script>
+let envoiEnCours=false;
+const idMap={
+  "debardeur_blue_lady":"https://i.imgur.com/Hdqhv78.jpg",
+  "debardeur_conspiracy":"https://i.imgur.com/WX8ct1w.jpg",
+  "debardeur_geod_couverture_cd":"https://i.imgur.com/gBWuJXJ.jpg",
+  "debardeur_more":"https://i.imgur.com/OTo04mh.jpg",
+  "debardeur_rattlesnakes_stone":"https://i.imgur.com/ZWhh2c1.jpg",
+  "debardeur_short_to_ground":"https://i.imgur.com/7ZzqV6o.jpg",
+  "femme_blue_lady":"https://i.imgur.com/4cb4Ysa.jpg",
+  "femme_conspiracy":"https://i.imgur.com/bzjcXWW.jpg",
+  "femme_geod_couverture_cd":"https://i.imgur.com/qRsypOr.jpg",
+  "femme_more":"https://i.imgur.com/swfdD2w.jpg",
+  "femme_rattlesnakes_stone":"https://i.imgur.com/9TlVHOO.jpg",
+  "femme_short_to_ground":"https://i.imgur.com/6aij7nd.jpg",
+  "homme_blue_lady":"https://i.imgur.com/eTcuvEQ.jpg",
+  "homme_conspiracy":"https://i.imgur.com/gmlqMG4.jpg",
+  "homme_geod_couverture_cd":"https://i.imgur.com/ElmFdIk.jpg",
+  "homme_more":"https://i.imgur.com/yI4UWr7.jpg",
+  "homme_rattlesnakes_stone":"https://i.imgur.com/TEmZAEt.jpg",
+  "homme_short_to_ground":"https://i.imgur.com/5cDO1p3.jpg"
+};
+function getImageUrl(m,s){
+  const map={"T-shirt homme Fruit of the Loom":"homme","T-shirt femme Fruit of the Loom":"femme","Débardeur femme Fruit of the Loom":"debardeur"};
+  const mk=map[m]; if(!mk) return null;
+  const sk=s.toLowerCase().replace(/'/g,'').replace(/ /g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g,'');
+  return idMap[`${mk}_${sk}`]||null;
+}
+function updatePreview(){
+  const m=document.querySelector('select[name="modele"]').value;
+  const s=document.querySelector('select[name="style"]').value;
+  const url=getImageUrl(m,s);
+  document.getElementById("previewImage").src=url||"https://i.imgur.com/iYKlO99.jpg";
+}
+document.querySelector('select[name="modele"]').addEventListener('change',updatePreview);
+document.querySelector('select[name="style"]').addEventListener('change',updatePreview);
+document.getElementById('commandeForm').addEventListener('submit',function(e){
+  e.preventDefault(); if(envoiEnCours)return; envoiEnCours=true;
+  const b=e.target.querySelector("button");
+  b.textContent="Envoi..."; b.disabled=true;
+  const formData=new FormData(e.target);
+  fetch("https://script.google.com/macros/s/AKfycbxsIPjoY4oe46XGpRWeh1MrnA2rhSbVLZZumHIblqbKXXnS4CHlTk8Hc6-pZP5yZMWFDQ/exec",{method:"POST",body:formData})
+  .then(r=>r.text()).then(()=>{
+    document.getElementById("confirmationMessage").textContent="✅ Commande enregistrée !";
+    e.target.reset(); updatePreview();
+    b.textContent="Envoyer la commande"; b.disabled=false; envoiEnCours=false;
+  }).catch(err=>{
+    alert("Erreur d'envoi"); console.error(err);
+    b.textContent="Envoyer la commande"; b.disabled=false; envoiEnCours=false;
+  });
+});
+</script>
 </body>
 </html>
